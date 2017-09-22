@@ -1,0 +1,20 @@
+<h1>
+  {{title}}
+</h1>
+
+<!-- <div class="endgame" *ngIf="gameover">{{ endmsg }}</div> -->
+
+<table>
+  <tr *ngFor="let row of game.board; let i = index" >
+    <td *ngFor="let col of row; let j = index" (click)="play(i, j)" >{{ col }}</td>
+  </tr>
+</table>
+
+<!--<h3>Player: {{ player }}</h3>-->
+
+<div class="btnPanel" >
+  <button (click)="reset()" id="reset">Restart</button>
+</div>
+
+<p *ngIf="gameOver" class="endgame">{{ message }}</p>
+<p *ngIf="draw" class="endgame">The game is a draw</p>
