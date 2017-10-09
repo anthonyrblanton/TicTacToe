@@ -87,84 +87,92 @@ export class Game {
     return 0;
   }
 
-  min(board: Array<Array<string>>, depth: number): number {
+  minimax(depth: number, maximizer: boolean): number {
+
+    // Game is finished, return the score of the board
     if (this.isGameOver()) {
       return this.score(depth);
     }
 
-    let score = Number.MAX_SAFE_INTEGER;
+    if (maximizer) {
+      let bestVal = Number.MIN_SAFE_INTEGER;
 
-    for (let r = 0; r < 3; r++) {
-      for (let c = 0; c < 3; c++) {
-        if (this.board[r][c] === ' ') {
-          board[r][c] = this.human;
-          const tempScore = this.max(board, depth + 1);
+      for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 3; col++) {
 
-          score = Math.min(score, tempScore);
+          if (this._board[row][col] === ' ') {
 
-          board[r][c] = ' ';
-        }
-      }
-    }
-    return score;
-  }
+            this._board[row][col] = this.computer;
 
-  max(board: Array<Array<string>>, depth: number): number {
+            const value = this.minimax(depth + 1, false);
 
-    if (this.isGameOver()) {
-      return this.score(depth);
-    }
+            bestVal = Math.max(bestVal, value);
 
-    let score = Number.MIN_SAFE_INTEGER;
-
-    for (let r = 0; r < 3; r++) {
-      for (let c = 0; c < 3; c++) {
-        if (this.board[r][c] === ' ') {
-
-          board[r][c] = this.human;
-          const tempScore = this.min(board, depth + 1);
-
-          score = Math.min(score, tempScore);
-
-          board[r][c] = ' ';
-        }
-      }
-    }
-
-    return 0;
-  }
-
-  minimax(): Move {
-
-    let best: Move = new Move(-1, -1);
-
-    let bestScore = Number.MIN_SAFE_INTEGER;
-
-    for (let row = 0; row < 3; row++) {
-      for (let col = 0; col < 3; col++) {
-        if (this.board[row][col] === ' ') {
-          this.board[row][col] = this.computer;
-
-          const tempScore = this.min(this.board, 0);
-
-          this.board[row][col] = ' ';
-
-          if (tempScore > bestScore) {
-            bestScore = tempScore;
-            best.row = row;
-            best.col = col;
+            this._board[row][col] = ' ';
           }
         }
       }
+
+      return bestVal;
+
+    } else {
+
+      let bestVal = Number.MAX_SAFE_INTEGER;
+
+      for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 3; col++) {
+
+          if (this._board[row][col] === ' ') {
+
+            this._board[row][col] = this.human;
+
+            const value = this.minimax(depth + 1, true);
+
+            bestVal = Math.min(bestVal, value);
+
+            this._board[row][col] = ' ';
+          }
+        }
+      }
+
+      return bestVal;
     }
-
-    return best;
-
   }
 
-  compMove() {
-    const compMove: Move = this.minimax();
+  theBestMove(): Move {
 
-    this.board[compMove.row][compMove.col] = this.computer;
+    const theBest: Move = new Move(-1, -1);
+
+    let bestValue = Number.MIN_SAFE_INTEGER;
+
+    for (let row = 0; row < 3; row++) {
+      for (let col = 0; col < 3; col++) {
+
+        if (this._board[row][col] === ' ') {
+
+          this._board[row][col] = this.computer;
+
+          const value = this.minimax(0, false);
+
+          this._board[row][col] = ' ';
+
+          if (value > bestValue) {
+            theBest.row = row;
+            theBest.col = col;
+
+            bestValue = value;
+          }
+
+        }
+      }
+    }
+
+    return theBest;
+  }
+
+  public compMove(): void {
+    const move = this.theBestMove();
+
+    this._board[move.row][move.col] = this.computer;
   }
 }
