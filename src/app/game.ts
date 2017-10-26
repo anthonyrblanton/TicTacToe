@@ -12,6 +12,7 @@ export class Game {
         this._board[row][col] = ' ';
       }
     }
+
   }
 
   public get board() {
@@ -174,5 +175,11 @@ export class Game {
     const move = this.theBestMove();
 
     this._board[move.row][move.col] = this.computer;
+  }
+
+  public humanMove(row: number, col: number) {
+    if (this.board[row][col] === ' ') {
+      this.board[row][col] = this.human;
+    }
   }
 }

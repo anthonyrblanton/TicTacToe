@@ -1,8 +1,6 @@
 <h1>
-  {{title}}
+  Tic-Tac-Toe - <span id="word">Angular!</span>
 </h1>
-
-<!-- <div class="endgame" *ngIf="gameover">{{ endmsg }}</div> -->
 
 <table>
   <tr *ngFor="let row of game.board; let i = index" >
@@ -10,11 +8,11 @@
   </tr>
 </table>
 
-<!--<h3>Player: {{ player }}</h3>-->
-
 <div class="btnPanel" >
-  <button (click)="reset()" id="reset">Restart</button>
+  <!-- <img src="bigperson.png" id="humanIcon" (click)="reset()">
+  <img src="Person.png" id="compIcon" (click)="reset()"> -->
+    <button (click)="reset()" id="human"></button>
+    <button (click)="computerFirst()" id="comp"></button>
 </div>
 
-<p *ngIf="gameOver" class="endgame">{{ message }}</p>
-<p *ngIf="draw" class="endgame">The game is a draw</p>
+<p *ngIf="isGameOver" class="endgame">{{ message }}</p>

@@ -8,28 +8,42 @@ import { Game } from './game';
 })
 
 export class AppComponent {
-  title = 'Tic-Tac-Toe';
+  title = 'Tic-Tac-Toe - Angular';
   player = 'X';
   opponent = 'O';
-  gameOver = false;
+  isGameOver = false;
   message = '';
 
 
   game = new Game(this.player, this.opponent);
 
+  computerFirst() {
+
+    this.player = 'O';
+    this.opponent = 'X';
+    this.isGameOver = false;
+
+    this.game = new Game(this.player, this.opponent);
+
+    this.game.compMove();
+  }
+
   play(row: number, col: number) {
 
-    if (!this.gameOver) {
+    if (!this.isGameOver) {
 
-      this.game.board[row][col] = this.game.human;
+      this.game.humanMove(row, col);
 
-      if (this.gameOver = this.game.isGameWon(this.player)) {
+      if (this.isGameOver = this.game.isGameWon(this.player)) {
         this.message = 'Player ' + this.player + ' wins!';
-      } else if (this.gameOver = !this.game.isMoveAvailable()) {
+      } else if (this.isGameOver = !this.game.isMoveAvailable()) {
         this.message = 'The game is a draw.';
       } else {
         this.game.compMove();
-        if (this.gameOver = this.game.isGameWon(this.opponent)) {
+
+        if (this.isGameOver = !this.game.isMoveAvailable()) {
+          this.message = 'The game is a draw.';
+        } else if (this.isGameOver = this.game.isGameWon(this.opponent)) {
           this.message = 'Player ' + this.opponent + ' wins.';
         }
       }
@@ -39,8 +53,14 @@ export class AppComponent {
   }
 
   reset() {
+    this.player = 'X';
+    this.opponent = 'O';
     this.game = new Game(this.player, this.opponent);
-    this.gameOver = false;
+    this.isGameOver = false;
+  }
+
+  checkGameOver(): boolean {
+    return this.isGameOver;
   }
 
 }
